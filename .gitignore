@@ -1,0 +1,10 @@
+# TODO: Your editor's folder
+# .vscode/
+__pycache__/
+env/
+
+.pytest-cache
+documentation/
+
+dist/*
+*.egg-info
