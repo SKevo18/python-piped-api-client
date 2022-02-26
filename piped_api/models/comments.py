@@ -35,10 +35,32 @@ class Comments(BasePipedModel):
         @property
         def commented_time(self) -> str:
             """
-                The time the comment was made (format: `'x y ago'`)
+                The time the comment was made (format: `'x y ago'`).
+
+                ### Note:
+                The raw time from API also includes the `'(edited)'` suffix to mark comment as edited (if it was).
+                By accessing this property, the suffix is automatically removed.
+                If you for whatever reason want to keep the suffix, access this property directly via `Comment.data['commentedTime']`
             """
 
-            return self.data['commentedTime']
+            time: str = self.data['commentedTime']
+
+            return time.removesuffix(' (edited)')
+
+
+        @property
+        def is_edited(self) -> bool:
+            """
+                Whether or not the comment is edited.
+
+                ### Note:
+                This property checks whether there is `'(edited)'` in the `commentedTime` property, because that's where you get that from.
+                See `Comments.Comment.commented_time`
+            """
+
+            time: str = self.data['commentedTime']
+
+            return time.endswith('(edited)')
 
 
         @property
