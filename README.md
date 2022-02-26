@@ -1,5 +1,7 @@
 # Piped API client (Python)
 
+[![Test with pyTest](https://github.com/CWKevo/python-piped-api-client/actions/workflows/pytest.yml/badge.svg?branch=master)](https://github.com/CWKevo/python-piped-api-client/actions/workflows/pytest.yml)
+
 A Python API wrapper for [Piped](https://piped-docs.kavin.rocks/).
 
 ## 🎁 Support me
