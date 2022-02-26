@@ -4,9 +4,10 @@ from requests import Session
 
 from .models import BasePipedModel
 from .models.comments import Comments
+from .models.videos import Video
 
 
-_MDL = t.TypeVar('_MDL', bound=BasePipedModel)
+_MDL = t.TypeVar('_MDL', bound=t.Type[BasePipedModel])
 
 
 
@@ -62,3 +63,15 @@ class PipedClient:
 
         else:
             return self._get_json(f"/comments/{video_id}", Comments)
+
+
+
+    def get_video(self, video_id: str) -> Video:
+        """
+            Gets information about a specific video.
+
+            ### Parameters:
+            - `video_id` - The ID of the video to get information for
+        """
+
+        return self._get_json(f"/streams/{video_id}", Video)
