@@ -8,7 +8,7 @@ from .models.comments import Comments
 
 
 # For pdoc:
-README_PATH = Path(__file__).parent.absolute() / Path('README.md')
+README_PATH = Path(__file__).parent.parent.absolute() / Path('README.md')
 try:
     with open(README_PATH, 'r', encoding="UTF-8") as readme:
         __readme__ = readme.read()
