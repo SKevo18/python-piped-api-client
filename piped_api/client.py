@@ -5,6 +5,7 @@ from requests import Session
 from .models import BasePipedModel
 from .models.comments import Comments
 from .models.videos import Video
+from .models.channels import Channel
 
 
 _MDL = t.TypeVar('_MDL', bound=t.Type[BasePipedModel])
@@ -48,7 +49,7 @@ class PipedClient:
 
 
 
-    def get_comments(self, video_id: str, nextpage: t.Optional[t.Dict[str, t.Optional[str]]]=None) -> Comments:
+    def get_comments(self, video_id: str, nextpage: t.Optional[t.Dict[str, t.Optional[str]]]=None, **kwargs) -> Comments:
         """
             Gets a list of comments for a specific video.
 
@@ -56,28 +57,33 @@ class PipedClient:
             - `video_id` - The ID of the video to get comments for
             - `nextpage` - Nextpage data, obtained from `.models.comments.Comments.nextpage` property. If this is `None`, the first page of comments is returned.
                 There are often 20 comments per page.
+            - `**kwargs` - Additional keyword arguments to pass to `requests.Session.get`
         """
 
+        kw = kwargs.copy()
+
         if nextpage is not None:
-            return self._get_json(f"/nextpage/comments/{video_id}", Comments, params={"nextpage": nextpage})
+            kw.update({'params': nextpage})
+            return self._get_json(f"/nextpage/comments/{video_id}", Comments, **kw)
 
         else:
-            return self._get_json(f"/comments/{video_id}", Comments)
+            return self._get_json(f"/comments/{video_id}", Comments, **kw)
 
 
 
-    def get_video(self, video_id: str) -> Video:
+    def get_video(self, video_id: str, **kwargs) -> Video:
         """
             Gets information about a specific video.
 
             ### Parameters:
             - `video_id` - The ID of the video to get information for
+            - `**kwargs` - Additional keyword arguments to pass to `requests.Session.get`
         """
 
-        return self._get_json(f"/streams/{video_id}", Video)
+        return self._get_json(f"/streams/{video_id}", Video, **kwargs)
 
 
-    def get_trending(self, country_code: str='US') -> t.List[Video.RelatedStream]:
+    def get_trending(self, country_code: str='US', **kwargs) -> t.List[Video.RelatedStream]:
         """
             Obtains trending videos for a specific country. If there are no trending videos (or `country_code` is invalid),
             an empty list is returned.
@@ -85,6 +91,22 @@ class PipedClient:
             ### Parameters:
             - `country_code` - The country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)) to get trending videos for. This is automatically capitalized by this package,
                 since Piped for some reason doesn't accept lowercase country codes. Note: countries such as China or North Korea don't have trending videos, so they will always return an empty list.
+            - `**kwargs` - Additional keyword arguments to pass to `requests.Session.get`
         """
 
-        return [Video.RelatedStream(trending_video) for trending_video in self._get_json(f"/trending", params={'region': country_code.upper()})]
+        kw = kwargs.copy()
+        kw.update({'params': {'region': country_code.upper()}})
+
+        return [Video.RelatedStream(trending_video) for trending_video in self._get_json(f"/trending", **kw)]
+
+
+    def get_channel(self, channel_id: str, **kwargs) -> Channel:
+        """
+            Gets information about a specific channel.
+
+            ### Parameters:
+            - `channel_id` - The ID of the channel to get information for
+            - `**kwargs` - Additional keyword arguments to pass to `requests.Session.get`
+        """
+
+        return self._get_json(f"/channels/{channel_id}", Channel, **kwargs)
