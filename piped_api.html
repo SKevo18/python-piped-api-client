@@ -21,6 +21,18 @@
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
+        <h2>Contents</h2>
+        <ul>
+  <li><a href="#piped-api-client-python">Piped API client (Python)</a>
+  <ul>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#quickstart">Quickstart</a></li>
+    <li><a href="#why">Why?</a></li>
+    <li><a href="#useful-links">Useful links</a></li>
+    <li><a href="#support-me">🎁 Support me</a></li>
+  </ul></li>
+</ul>
+
 
         <h2>Submodules</h2>
         <ul>
@@ -42,7 +54,72 @@
                     <h1 class="modulename">
 piped_api    </h1>
 
-                        <div class="docstring"><p>Failed to read README.md!</p>
+                        <div class="docstring"><h1 id="piped-api-client-python">Piped API client (Python)</h1>
+
+<p><a href="https://github.com/CWKevo/python-piped-api-client/actions/workflows/pytest.yml"><img src="https://github.com/CWKevo/python-piped-api-client/actions/workflows/pytest.yml/badge.svg?branch=master" alt="Test with pyTest" /></a></p>
+
+<p>A Python API wrapper for <a href="https://piped-docs.kavin.rocks/">Piped</a>. This can essentially be used as an alternative way to access YouTube's API, without needing to use an API key.</p>
+
+<h2 id="installation">Installation</h2>
+
+<div class="pdoc-code codehilite"><pre><span></span><code>pip install piped-api
+</code></pre></div>
+
+<h2 id="quickstart">Quickstart</h2>
+
+<p>Getting started is very easy:</p>
+
+<div class="pdoc-code codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">piped_api</span> <span class="kn">import</span> <span class="n">PipedClient</span>
+
+<span class="n">CLIENT</span> <span class="o">=</span> <span class="n">PipedClient</span><span class="p">()</span>
+
+
+<span class="c1"># Print out the first audio stream URL for a video:</span>
+<span class="n">video</span> <span class="o">=</span> <span class="n">CLIENT</span><span class="o">.</span><span class="n">get_video</span><span class="p">(</span><span class="n">video_id</span><span class="p">)</span>
+<span class="n">audio_stream</span> <span class="o">=</span> <span class="n">video</span><span class="o">.</span><span class="n">get_streams</span><span class="p">(</span><span class="s1">&#39;audio&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Audio stream URL: </span><span class="si">{</span><span class="n">audio_stream</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">audio_stream</span><span class="o">.</span><span class="n">mime_type</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="why">Why?</h2>
+
+<p>This package has allowed me to start creating my open-source project, <a href="https://github.com/CWKevo/ArchiveTube">ArchiveTube</a> - a scrapper and archive for YouTube content (videos and comments) - to preserve them and make them available to anyone, with ability to search for comments and videos. View hall of fame (most liked comments and videos), bring back dislikes via <a href="https://returnyoutubedislike.com">ReturnYouTubeDislike.com</a>, view deleted content and much more!
+Google has showed us that they make YouTube own us by harvesting our data. This is also followed by non-throught out decisions, which their users aren't happy with. Let's do it the other way around this time by reclaiming our content and entertainment back &amp; make YouTube great again!</p>
+
+<p>The creation of this package was also primarily fueled by the same type of motivation <a href="https://piped-docs.kavin.rocks/docs/why/">Piped has</a>.</p>
+
+<p>Google's API is not very easy-to-use - you must obtain some JSON thingy to use it, and it is very low-level and not very user-friendly.
+On the other hand, this package accessed the <a href="https://piped.kavin.rocks/">Piped API</a>, which has a much more high-level API and doesn't need an account or API keys.</p>
+
+<p>It is not meant to be a replacement for the official YouTube API, but it can help you to cut the strings that Google attaches to you when using their API.</p>
+
+<h2 id="useful-links">Useful links</h2>
+
+<ul>
+<li><a href="https://piped-docs.kavin.rocks/docs/api-documentation/">Piped's official API documentation</a></li>
+<li><a href="https://cwkevo.github.io/python-piped-api-client/">Documentation for this package</a></li>
+</ul>
+
+<h2 id="support-me">🎁 Support me</h2>
+
+<p>I create free software to benefit people.
+If this project helps you and you like it, consider supporting me by donating via cryptocurrency:</p>
+
+<ul>
+<li>Bitcoin: <code>bc1q6n7f4mllak9xts355wlyq2n3rce60w2r5aswxa</code>; <code>1LMS4u41beDGMb9AXmXzfH7ZkZSwGSkSyx</code></li>
+<li>Ethereum: <code>0x12C598b3bC084710507c9d6d19C9434fD26864Cc</code></li>
+<li>Litecoin: <code>LgHQK1NQrRQ56AKvVtSxMubqbjSWh7DTD2</code></li>
+<li>Dash: <code>Xe7TYoRCYPdZyiQYDjgzCGxR5juPWV8PgZ</code></li>
+<li>Zcash: <code>t1Pesobv3SShMHGfrZWe926nsnBo2pyqN3f</code></li>
+<li>Dogecoin: <code>DALxrKSbcCXz619QqLj9qKXFnTp8u2cS12</code></li>
+<li>Ripple: <code>rNQsgQvMbbBAd957XyDeNudA4jLH1ANERL</code></li>
+<li>Monero: <code>48TfTddnpgnKBn13MdJNJwHfxDwwGngPgL3v6bNSTwGaXveeaUWzJcMUVrbWUyDSyPDwEJVoup2gmDuskkcFuNG99zatYFS</code></li>
+<li>Bitcoin Cash: <code>qzx6pqzcltm7ely24wnhpzp65r8ltrqgeuevtrsj9n</code></li>
+<li>Ethereum Classic: <code>0x383Dc3B83afBD66b4a5e64511525FbFeb2C023Db</code></li>
+</ul>
+
+<p>More cryptocurrencies are supported. If you are interested in donating with a different one, please <a href="mailto:me@kevo.link">E-mail me</a>.
+No other forms of donation are currently supported.</p>
 </div>
 
                         <details>
@@ -57,7 +134,7 @@ piped_api    </h1>
 
 
 <span class="c1"># For pdoc:</span>
-<span class="n">README_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;README.md&#39;</span><span class="p">)</span>
+<span class="n">README_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;README.md&#39;</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">README_PATH</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">readme</span><span class="p">:</span>
         <span class="n">__readme__</span> <span class="o">=</span> <span class="n">readme</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
