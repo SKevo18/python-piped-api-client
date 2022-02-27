@@ -39,6 +39,12 @@
                         <li>
                                 <a class="function" href="#PipedClient.get_comments">get_comments</a>
                         </li>
+                        <li>
+                                <a class="function" href="#PipedClient.get_video">get_video</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#PipedClient.get_trending">get_trending</a>
+                        </li>
                 </ul>
 
             </li>
@@ -67,9 +73,10 @@
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">BasePipedModel</span>
 <span class="kn">from</span> <span class="nn">.models.comments</span> <span class="kn">import</span> <span class="n">Comments</span>
+<span class="kn">from</span> <span class="nn">.models.videos</span> <span class="kn">import</span> <span class="n">Video</span>
 
 
-<span class="n">_MDL</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;_MDL&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">BasePipedModel</span><span class="p">)</span>
+<span class="n">_MDL</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;_MDL&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">Type</span><span class="p">[</span><span class="n">BasePipedModel</span><span class="p">])</span>
 
 
 
@@ -125,6 +132,31 @@
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/comments/</span><span class="si">{</span><span class="n">video_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Comments</span><span class="p">)</span>
+
+
+
+    <span class="k">def</span> <span class="nf">get_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Video</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Gets information about a specific video.</span>
+
+<span class="sd">            ### Parameters:</span>
+<span class="sd">            - `video_id` - The ID of the video to get information for</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/streams/</span><span class="si">{</span><span class="n">video_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Video</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">get_trending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">country_code</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;US&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">Video</span><span class="o">.</span><span class="n">RelatedStream</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Obtains trending videos for a specific country. If there are no trending videos (or `country_code` is invalid),</span>
+<span class="sd">            an empty list is returned.</span>
+
+<span class="sd">            ### Parameters:</span>
+<span class="sd">            - `country_code` - The country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)) to get trending videos for. This is automatically capitalized by this package,</span>
+<span class="sd">                since Piped for some reason doesn&#39;t accept lowercase country codes. Note: countries such as China or North Korea don&#39;t have trending videos, so they will always return an empty list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">Video</span><span class="o">.</span><span class="n">RelatedStream</span><span class="p">(</span><span class="n">trending_video</span><span class="p">)</span> <span class="k">for</span> <span class="n">trending_video</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/trending&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">country_code</span><span class="o">.</span><span class="n">upper</span><span class="p">()})]</span>
 </pre></div>
 
         </details>
@@ -193,6 +225,31 @@
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/comments/</span><span class="si">{</span><span class="n">video_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Comments</span><span class="p">)</span>
+
+
+
+    <span class="k">def</span> <span class="nf">get_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Video</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Gets information about a specific video.</span>
+
+<span class="sd">            ### Parameters:</span>
+<span class="sd">            - `video_id` - The ID of the video to get information for</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/streams/</span><span class="si">{</span><span class="n">video_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Video</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">get_trending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">country_code</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;US&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">Video</span><span class="o">.</span><span class="n">RelatedStream</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Obtains trending videos for a specific country. If there are no trending videos (or `country_code` is invalid),</span>
+<span class="sd">            an empty list is returned.</span>
+
+<span class="sd">            ### Parameters:</span>
+<span class="sd">            - `country_code` - The country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)) to get trending videos for. This is automatically capitalized by this package,</span>
+<span class="sd">                since Piped for some reason doesn&#39;t accept lowercase country codes. Note: countries such as China or North Korea don&#39;t have trending videos, so they will always return an empty list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">Video</span><span class="o">.</span><span class="n">RelatedStream</span><span class="p">(</span><span class="n">trending_video</span><span class="p">)</span> <span class="k">for</span> <span class="n">trending_video</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/trending&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">country_code</span><span class="o">.</span><span class="n">upper</span><span class="p">()})]</span>
 </pre></div>
 
         </details>
@@ -279,6 +336,81 @@ For example, you could use <a href="https://pypi.org/project/requests-cache/">re
 <li><code>video_id</code> - The ID of the video to get comments for</li>
 <li><code>nextpage</code> - Nextpage data, obtained from <code>.models.comments.Comments.nextpage</code> property. If this is <code>None</code>, the first page of comments is returned.
 There are often 20 comments per page.</li>
+</ul>
+</div>
+
+
+                            </div>
+                            <div id="PipedClient.get_video" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#PipedClient.get_video">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">get_video</span><span class="signature">(self, video_id: str) -&gt; <a href="models/videos.html#Video">piped_api.models.videos.Video</a></span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">get_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Video</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Gets information about a specific video.</span>
+
+<span class="sd">            ### Parameters:</span>
+<span class="sd">            - `video_id` - The ID of the video to get information for</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/streams/</span><span class="si">{</span><span class="n">video_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Video</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Gets information about a specific video.</p>
+
+<h3 id="parameters">Parameters:</h3>
+
+<ul>
+<li><code>video_id</code> - The ID of the video to get information for</li>
+</ul>
+</div>
+
+
+                            </div>
+                            <div id="PipedClient.get_trending" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#PipedClient.get_trending">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">get_trending</span><span class="signature">(
+    self,
+    country_code: str = &#39;US&#39;
+) -&gt; List[<a href="models/videos.html#Video.RelatedStream">piped_api.models.videos.Video.RelatedStream</a>]</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">get_trending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">country_code</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;US&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">Video</span><span class="o">.</span><span class="n">RelatedStream</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Obtains trending videos for a specific country. If there are no trending videos (or `country_code` is invalid),</span>
+<span class="sd">            an empty list is returned.</span>
+
+<span class="sd">            ### Parameters:</span>
+<span class="sd">            - `country_code` - The country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)) to get trending videos for. This is automatically capitalized by this package,</span>
+<span class="sd">                since Piped for some reason doesn&#39;t accept lowercase country codes. Note: countries such as China or North Korea don&#39;t have trending videos, so they will always return an empty list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">Video</span><span class="o">.</span><span class="n">RelatedStream</span><span class="p">(</span><span class="n">trending_video</span><span class="p">)</span> <span class="k">for</span> <span class="n">trending_video</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/trending&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">country_code</span><span class="o">.</span><span class="n">upper</span><span class="p">()})]</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Obtains trending videos for a specific country. If there are no trending videos (or <code>country_code</code> is invalid),
+an empty list is returned.</p>
+
+<h3 id="parameters">Parameters:</h3>
+
+<ul>
+<li><code>country_code</code> - The country code (<a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements">ISO 3166-1 alpha-2</a>) to get trending videos for. This is automatically capitalized by this package,
+since Piped for some reason doesn't accept lowercase country codes. Note: countries such as China or North Korea don't have trending videos, so they will always return an empty list.</li>
 </ul>
 </div>
 

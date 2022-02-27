@@ -49,6 +49,9 @@
                                             <a class="variable" href="#Comments.Comment.commented_time">commented_time</a>
                                     </li>
                                     <li>
+                                            <a class="variable" href="#Comments.Comment.is_edited">is_edited</a>
+                                    </li>
+                                    <li>
                                             <a class="variable" href="#Comments.Comment.commentor_url">commentor_url</a>
                                     </li>
                                     <li>
@@ -140,10 +143,32 @@
         <span class="nd">@property</span>
         <span class="k">def</span> <span class="nf">commented_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
             <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">                The time the comment was made (format: `&#39;x y ago&#39;`)</span>
+<span class="sd">                The time the comment was made (format: `&#39;x y ago&#39;`).</span>
+
+<span class="sd">                ### Note:</span>
+<span class="sd">                The raw time from API also includes the `&#39;(edited)&#39;` suffix to mark comment as edited (if it was).</span>
+<span class="sd">                By accessing this property, the suffix is automatically removed.</span>
+<span class="sd">                If you for whatever reason want to keep the suffix, access this property directly via `Comment.data[&#39;commentedTime&#39;]`</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;commentedTime&#39;</span><span class="p">]</span>
+            <span class="n">time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;commentedTime&#39;</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s1">&#39; (edited)&#39;</span><span class="p">)</span>
+
+
+        <span class="nd">@property</span>
+        <span class="k">def</span> <span class="nf">is_edited</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Whether or not the comment is edited.</span>
+
+<span class="sd">                ### Note:</span>
+<span class="sd">                This property checks whether there is `&#39;(edited)&#39;` in the `commentedTime` property, because that&#39;s where you get that from.</span>
+<span class="sd">                See `Comments.Comment.commented_time`</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="n">time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;commentedTime&#39;</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;(edited)&#39;</span><span class="p">)</span>
 
 
         <span class="nd">@property</span>
@@ -292,10 +317,32 @@
         <span class="nd">@property</span>
         <span class="k">def</span> <span class="nf">commented_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
             <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">                The time the comment was made (format: `&#39;x y ago&#39;`)</span>
+<span class="sd">                The time the comment was made (format: `&#39;x y ago&#39;`).</span>
+
+<span class="sd">                ### Note:</span>
+<span class="sd">                The raw time from API also includes the `&#39;(edited)&#39;` suffix to mark comment as edited (if it was).</span>
+<span class="sd">                By accessing this property, the suffix is automatically removed.</span>
+<span class="sd">                If you for whatever reason want to keep the suffix, access this property directly via `Comment.data[&#39;commentedTime&#39;]`</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;commentedTime&#39;</span><span class="p">]</span>
+            <span class="n">time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;commentedTime&#39;</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s1">&#39; (edited)&#39;</span><span class="p">)</span>
+
+
+        <span class="nd">@property</span>
+        <span class="k">def</span> <span class="nf">is_edited</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Whether or not the comment is edited.</span>
+
+<span class="sd">                ### Note:</span>
+<span class="sd">                This property checks whether there is `&#39;(edited)&#39;` in the `commentedTime` property, because that&#39;s where you get that from.</span>
+<span class="sd">                See `Comments.Comment.commented_time`</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="n">time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;commentedTime&#39;</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;(edited)&#39;</span><span class="p">)</span>
 
 
         <span class="nd">@property</span>
@@ -507,10 +554,32 @@
         <span class="nd">@property</span>
         <span class="k">def</span> <span class="nf">commented_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
             <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">                The time the comment was made (format: `&#39;x y ago&#39;`)</span>
+<span class="sd">                The time the comment was made (format: `&#39;x y ago&#39;`).</span>
+
+<span class="sd">                ### Note:</span>
+<span class="sd">                The raw time from API also includes the `&#39;(edited)&#39;` suffix to mark comment as edited (if it was).</span>
+<span class="sd">                By accessing this property, the suffix is automatically removed.</span>
+<span class="sd">                If you for whatever reason want to keep the suffix, access this property directly via `Comment.data[&#39;commentedTime&#39;]`</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;commentedTime&#39;</span><span class="p">]</span>
+            <span class="n">time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;commentedTime&#39;</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s1">&#39; (edited)&#39;</span><span class="p">)</span>
+
+
+        <span class="nd">@property</span>
+        <span class="k">def</span> <span class="nf">is_edited</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Whether or not the comment is edited.</span>
+
+<span class="sd">                ### Note:</span>
+<span class="sd">                This property checks whether there is `&#39;(edited)&#39;` in the `commentedTime` property, because that&#39;s where you get that from.</span>
+<span class="sd">                See `Comments.Comment.commented_time`</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="n">time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;commentedTime&#39;</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;(edited)&#39;</span><span class="p">)</span>
 
 
         <span class="nd">@property</span>
@@ -627,7 +696,30 @@
     </div>
 
     
-            <div class="docstring"><p>The time the comment was made (format: <code>'x y ago'</code>)</p>
+            <div class="docstring"><p>The time the comment was made (format: <code>'x y ago'</code>).</p>
+
+<h3 id="note">Note:</h3>
+
+<p>The raw time from API also includes the <code>'(edited)'</code> suffix to mark comment as edited (if it was).
+By accessing this property, the suffix is automatically removed.
+If you for whatever reason want to keep the suffix, access this property directly via <code>Comment.data['commentedTime']</code></p>
+</div>
+
+
+                            </div>
+                            <div id="Comments.Comment.is_edited" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#Comments.Comment.is_edited">#&nbsp;&nbsp</a>
+
+        <span class="name">is_edited</span><span class="annotation">: bool</span>
+    </div>
+
+    
+            <div class="docstring"><p>Whether or not the comment is edited.</p>
+
+<h3 id="note">Note:</h3>
+
+<p>This property checks whether there is <code>'(edited)'</code> in the <code>commentedTime</code> property, because that's where you get that from.
+See <code><a href="#Comments.Comment.commented_time">Comments.Comment.commented_time</a></code></p>
 </div>
 
 
