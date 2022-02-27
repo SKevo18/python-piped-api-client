@@ -1,4 +1,3 @@
-from re import S
 import typing as t
 
 from datetime import datetime, date, timedelta
@@ -306,9 +305,9 @@ class Video(BasePipedModel):
 
 
 
-    class RelatedVideo(BasePipedModel):
+    class RelatedStream(BasePipedModel):
         """
-            A related video to the current video (e. g.: from the right sidebar)
+            A related stream (e. g.: related video to the current one from the right sidebar, video related to/uploaded by a channel and trending video).
         """
 
         @property
@@ -411,10 +410,10 @@ class Video(BasePipedModel):
                 The date the related video was uploaded (as a `datetime.datetime` object).
 
                 ### Note:
-                The original value was in POSIX timestamp (`Video.data['uploaded']`), but this package converts it to a `datetime.datetime` object.
+                The original value was in milliseconds since epoch (`Video.data['uploaded']`), but this package converts it to a `datetime.datetime` object.
             """
 
-            return datetime.fromtimestamp(self.data['uploaded'])
+            return datetime.fromtimestamp(self.data['uploaded'] / 1000)
 
 
         @property
@@ -428,12 +427,12 @@ class Video(BasePipedModel):
 
 
     @property
-    def related_videos(self) -> t.List[RelatedVideo]:
+    def related_videos(self) -> t.List[RelatedStream]:
         """
             List of related streams
         """
 
-        return [self.RelatedVideo(video_data) for video_data in self.data['relatedVideos']]
+        return [self.RelatedStream(video_data) for video_data in self.data['relatedVideos']]
 
 
 

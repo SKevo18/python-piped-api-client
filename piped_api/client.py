@@ -75,3 +75,16 @@ class PipedClient:
         """
 
         return self._get_json(f"/streams/{video_id}", Video)
+
+
+    def get_trending(self, country_code: str='US') -> t.List[Video.RelatedStream]:
+        """
+            Obtains trending videos for a specific country. If there are no trending videos (or `country_code` is invalid),
+            an empty list is returned.
+
+            ### Parameters:
+            - `country_code` - The country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)) to get trending videos for. This is automatically capitalized by this package,
+                since Piped for some reason doesn't accept lowercase country codes. Note: countries such as China or North Korea don't have trending videos, so they will always return an empty list.
+        """
+
+        return [Video.RelatedStream(trending_video) for trending_video in self._get_json(f"/trending", params={'region': country_code.upper()})]
