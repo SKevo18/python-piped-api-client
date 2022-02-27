@@ -12,7 +12,7 @@ def test_comments(video_id: str='dQw4w9WgXcQ') -> None:
     np = None
 
     while at_page < max_pages:
-        comments = CLIENT.get_comments(video_id, nextpage=np)
+        comments = CLIENT.get_comments(video_id, nextpage=np, params={'hl': 'us'})
         at_page += 1
 
         print('=' * 35, f'Page: {at_page}', '=' * 35)

@@ -11,10 +11,15 @@ from .models.channels import Channel
 _MDL = t.TypeVar('_MDL', bound=t.Type[BasePipedModel])
 
 
+class APIError(Exception): """Raised when an API call fails"""
+
+
 
 class PipedClient:
     """
         An API client for [Piped](https://piped.kavin.rocks).
+
+        See also [Piped API docs](https://piped-docs.kavin.rocks/docs)
     """
 
     def __init__(self, base_api_url: str='https://pipedapi.kavin.rocks', session: t.Type[Session]=Session()) -> None:
@@ -40,7 +45,10 @@ class PipedClient:
             - `**kwargs` - Additional keyword arguments to pass to `requests.Session.get`
         """
 
-        json = self.session.get(f"{self.base_api_url}{uri}", **kwargs).json()
+        json: dict = self.session.get(f"{self.base_api_url}{uri}", **kwargs).json()
+
+        if json.get('error', None) is not None:
+            raise APIError(f"Error: {json['error']}")
 
         if as_model is not None:
             return as_model(json)
@@ -63,7 +71,7 @@ class PipedClient:
         kw = kwargs.copy()
 
         if nextpage is not None:
-            kw.update({'params': nextpage})
+            kw.update({'params': {'nextpage': nextpage}})
             return self._get_json(f"/nextpage/comments/{video_id}", Comments, **kw)
 
         else:
@@ -100,13 +108,26 @@ class PipedClient:
         return [Video.RelatedStream(trending_video) for trending_video in self._get_json(f"/trending", **kw)]
 
 
-    def get_channel(self, channel_id: str, **kwargs) -> Channel:
+    def get_channel_by_id(self, channel_id: str, **kwargs) -> Channel:
         """
-            Gets information about a specific channel.
+            Gets information about a specific channel by its ID.
 
             ### Parameters:
             - `channel_id` - The ID of the channel to get information for
             - `**kwargs` - Additional keyword arguments to pass to `requests.Session.get`
         """
 
-        return self._get_json(f"/channels/{channel_id}", Channel, **kwargs)
+        return self._get_json(f"/channel/{channel_id}", Channel, **kwargs)
+
+
+
+    def get_channel_by_name(self, channel_name: str, **kwargs) -> Channel:
+        """
+            Gets information about a specific channel by its name.
+
+            ### Parameters:
+            - `channel_name` - The name of the channel to get information for
+            - `**kwargs` - Additional keyword arguments to pass to `requests.Session.get`
+        """
+
+        return self._get_json(f"/c/{channel_name}", Channel, **kwargs)
