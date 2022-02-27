@@ -45,9 +45,9 @@ class PipedClient:
             - `**kwargs` - Additional keyword arguments to pass to `requests.Session.get`
         """
 
-        json: dict = self.session.get(f"{self.base_api_url}{uri}", **kwargs).json()
+        json: t.Union[dict, list] = self.session.get(f"{self.base_api_url}{uri}", **kwargs).json()
 
-        if json.get('error', None) is not None:
+        if isinstance(json, dict) and json.get('error', None) is not None:
             raise APIError(f"Error: {json['error']}")
 
         if as_model is not None:
