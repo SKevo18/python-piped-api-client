@@ -432,7 +432,7 @@ class Video(BasePipedModel):
             List of related streams
         """
 
-        return [self.RelatedStream(video_data) for video_data in self.data['relatedVideos']]
+        return [self.RelatedStream(video_data) for video_data in self.data['relatedStreams']]
 
 
 

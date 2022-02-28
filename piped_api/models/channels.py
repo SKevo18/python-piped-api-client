@@ -5,9 +5,40 @@ from .videos import Video
 
 
 
-class Channel(BasePipedModel):
+class NextPageChannel(BasePipedModel):
     """
-        Represents a YouTube channel
+        Represents a channel obtained via the `nextpage` endpoint.
+
+        This model contains only `nextpage` and `relatedStreams`. It's a parent for `Channel`.
+    """
+
+    @property
+    def nextpage(self) -> str:
+        """
+            A JSON encoded string to be passed to the `'nextpage'` endpoint(s) when
+            obtaining paginated data.
+        """
+
+        return self.data['nextpage']
+
+
+    @property
+    def uploaded_videos(self) -> t.List[Video.RelatedStream]:
+        """
+            List of uploaded videos from the current fetched data
+
+            There are max. 30 videos per page
+        """
+
+        return [Video.RelatedStream(video_data) for video_data in self.data['relatedStreams']]
+
+
+
+class Channel(NextPageChannel):
+    """
+        Represents a YouTube channel.
+
+        Contains properties of `NextPageChannel`.
     """
 
     @property
@@ -56,16 +87,6 @@ class Channel(BasePipedModel):
 
 
     @property
-    def nextpage(self) -> str:
-        """
-            A JSON encoded string to be passed to the `'nextpage'` endpoint(s) when
-            obtaining paginated data.
-        """
-
-        return self.data['nextpage']
-
-
-    @property
     def subscriber_count(self) -> int:
         """
             The number of subscribers the channel has
@@ -81,12 +102,3 @@ class Channel(BasePipedModel):
         """
 
         return self.data['verified']
-
-
-    @property
-    def uploaded_videos(self) -> t.List[Video.RelatedStream]:
-        """
-            List of uploaded videos from the current fetched data
-        """
-
-        return [Video.RelatedStream(video_data) for video_data in self.data['relatedVideos']]
