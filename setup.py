@@ -32,7 +32,7 @@ __doc__ = __readme__
 
 setuptools.setup(
     name = 'piped-api',
-    packages = setuptools.find_packages(exclude=('tests',), include=('piped_api',)),
+    packages = setuptools.find_packages(exclude=('tests',)),
 
     long_description=__readme__,
     long_description_content_type='text/markdown',
